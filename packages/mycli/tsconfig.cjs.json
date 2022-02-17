@@ -4,8 +4,5 @@
     "module": "CommonJS",
     "target": "ES2018",
     "outDir": "./cjs"
-  },
-  "include": [
-    "src/*.ts"
-  ]
+  }
 }

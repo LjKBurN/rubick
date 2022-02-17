@@ -1,30 +1,36 @@
-import path from 'path';
-import webpack, { Configuration } from 'webpack';
+import * as path from 'path';
+import * as webpack from 'webpack';
 import { merge } from 'webpack-merge';
-import nodeExternals from 'webpack-node-externals';
+import * as nodeExternals from 'webpack-node-externals';
 import { getCwd, loadConfig } from '../../server-utils';
-import baseConfig from './base';
+import { getBaseConfig } from './base';
 
 const projectRoot: string = getCwd();
 
-const config = loadConfig();
+const getServerConfig = () => {
+  const { chunkName, serverEntry } = loadConfig();
+  const serverConfig: webpack.Configuration = {
+    watch: true,
+    devtool: 'inline-source-map',
+    target: 'node',
+    entry: { [`${chunkName}`]: serverEntry },
+    output: {
+      path: path.join(projectRoot, 'dist/server'),
+      filename: '[name].server.js',
+      libraryTarget: 'commonjs',
+      clean: true,
+    },
+    externals: [nodeExternals()],
+    plugins: [
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
+      }),
+    ],
+  }
 
-const serverConfig: Configuration = {
-  devtool: 'inline-source-map',
-  target: 'node',
-  entry: { [`${config.chunkName}`]: '../../entry/server-entry' },
-  output: {
-    path: path.join(projectRoot, 'dist/server'),
-    filename: '[name].server.js',
-    libraryTarget: 'commonjs',
-    clean: true,
-  },
-  externals: [nodeExternals()],
-  plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1,
-    }),
-  ],
+  return merge(getBaseConfig(), serverConfig);
 }
 
-export default merge(baseConfig, serverConfig);
+export {
+  getServerConfig
+}

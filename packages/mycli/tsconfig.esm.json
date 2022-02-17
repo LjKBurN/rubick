@@ -5,7 +5,4 @@
     "target": "ES2018",
     "outDir": "./esm"
   },
-  "include": [
-    "src/*.ts"
-  ]
 }

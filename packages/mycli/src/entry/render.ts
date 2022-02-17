@@ -1,5 +1,5 @@
-import path from 'path';
-import ReactDOM from 'react-dom/server'
+import * as path from 'path';
+import { renderToString } from 'react-dom/server'
 import { Context } from 'koa';
 import { getCwd, loadConfig } from '../server-utils';
 
@@ -17,7 +17,7 @@ async function render(ctx: Context) {
 
   const { serverRender } = require(serverFile);
   const res = await serverRender(ctx);
-  ctx.body = ReactDOM.renderToString(res);
+  ctx.body = renderToString(res);
 }
 
 export {

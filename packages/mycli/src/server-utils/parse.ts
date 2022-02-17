@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import { promises as fs } from 'fs';
 import { getCwd, getPagesDir } from './cwd';
 
@@ -52,7 +52,7 @@ export const parseFeRoutes = async () => {
     // return `"fetch": () => import(/* webpackChunkName: "${currentWebpackChunkName}-fetch" */ '${m2.replace(/\^/g, '"')}')`
     return `"fetch": ${m2.replace(/\\"/g, '"')},`;
   })
-  await fs.writeFile(path.resolve(distPath, './feRoutes.js'), routes)
+  await fs.writeFile(path.resolve(distPath, './feRoutes.js'), routes);
 };
 
 const renderRoutes = async (pageDir: string, pathRecord: string[]) => {

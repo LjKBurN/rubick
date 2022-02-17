@@ -1,6 +1,7 @@
 import { webpack } from "webpack";
-import WebpackDevServer from 'webpack-dev-server';
-import webpackConfig from './config/client';
+import * as WebpackDevServer from 'webpack-dev-server';
+import { webpackPromisify } from './utils/promisify';
+import { getClientConfig } from './config/client';
 import { loadConfig } from '../server-utils';
 
 const config = loadConfig();
@@ -8,7 +9,7 @@ const config = loadConfig();
 const startClientServer = async (): Promise<void>  => {
   const { webpackDevServerConfig, fePort, host } = config;
   return await new Promise((resolve) => {
-    const compiler = webpack(webpackConfig);
+    const compiler = webpack(getClientConfig());
     const server = new WebpackDevServer(compiler, webpackDevServerConfig);
 
     compiler.hooks.done.tap('DonePlugin', () => {
@@ -19,6 +20,12 @@ const startClientServer = async (): Promise<void>  => {
   });
 }
 
+const startClientBuild = async () => {
+  await webpackPromisify(getClientConfig());
+  console.log('client build done')
+}
+
 export {
   startClientServer,
+  startClientBuild,
 }

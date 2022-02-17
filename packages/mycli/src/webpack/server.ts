@@ -1,8 +1,8 @@
 import { webpackPromisify } from './utils/promisify';
-import ServerConfig from './config/server';
+import { getServerConfig } from './config/server';
 
 const startServerBuild = async () => {
-  await webpackPromisify(ServerConfig);
+  await webpackPromisify(getServerConfig());
 };
 
 export {
