@@ -49,15 +49,6 @@ yargs
     await copyContextFile();
     spinner.stop();
     await Promise.all([startServerBuild(), startClientBuild()]);
-    const { stdout, stderr } = exec('yarn run dev:prod', {
-      env: { ...process.env }
-    });
-    stdout?.on('data', (data) => {
-      console.log(data);
-    });
-    stderr?.on('data', (data) => {
-      console.error(`error: ${data}`)
-    })
   })
   .demandCommand(1, 'You need at least one command before moving on')
   .fail((msg, err) => {
