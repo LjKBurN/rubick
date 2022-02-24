@@ -1,15 +1,63 @@
 #!/usr/bin/env node
 import * as yargs from 'yargs';
-import { parseFeRoutes, copyContextFile } from './server-utils';
-import { startClientBuild } from './webpack/client';
+import { resolve } from 'path';
+import { fork, exec } from 'child_process';
+import { rm, mkdir } from 'shelljs';
+import { parseFeRoutes, copyContextFile, getCwd } from './server-utils';
+import { startClientBuild, startClientServer } from './webpack/client';
 import { startServerBuild } from './webpack/server';
+
+const cwd = getCwd();
+
+const spinnerProcess = fork(resolve(__dirname, './spinner'));
+
+const spinner = {
+  start: () => spinnerProcess.send({
+    message: 'start'
+  }),
+  stop: () => spinnerProcess.send({
+    message: 'stop'
+  })
+};
 
 yargs
   .command('start', 'Start Server', {}, async (argv) => {
+    spinner.start();
     process.env.NODE_ENV = 'development';
+    rm('-rf', resolve(cwd, './dist'));
+    mkdir(resolve(cwd, './dist'));
     await parseFeRoutes();
     await copyContextFile();
+    spinner.stop();
+    await Promise.all([startServerBuild(), startClientServer()]);
+    const { stdout, stderr } = exec('yarn run dev', {
+      env: { ...process.env }
+    });
+    stdout?.on('data', (data) => {
+      console.log(data);
+    });
+    stderr?.on('data', (data) => {
+      console.error(`error: ${data}`)
+    })
+  })
+  .command('build', 'Build files', {}, async (argv) => {
+    spinner.start();
+    process.env.NODE_ENV = 'production';
+    rm('-rf', resolve(cwd, './dist'));
+    mkdir(resolve(cwd, './dist'));
+    await parseFeRoutes();
+    await copyContextFile();
+    spinner.stop();
     await Promise.all([startServerBuild(), startClientBuild()]);
+    const { stdout, stderr } = exec('yarn run dev:prod', {
+      env: { ...process.env }
+    });
+    stdout?.on('data', (data) => {
+      console.log(data);
+    });
+    stderr?.on('data', (data) => {
+      console.error(`error: ${data}`)
+    })
   })
   .demandCommand(1, 'You need at least one command before moving on')
   .fail((msg, err) => {

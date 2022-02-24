@@ -1,32 +1,37 @@
-import * as path from 'path';
 import { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
-import { getCwd, loadConfig } from '../../server-utils';
+import * as ReactRefreshPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import * as TerserPlugin from 'terser-webpack-plugin';
+import { loadConfig } from '../../server-utils';
 import { getBaseConfig } from './base';
 
-const projectRoot: string = getCwd();
+const WebpackBarPlugin = require('webpackbar');
 
 const getClientConfig = () => {
-  const { chunkName, clientEntry } = loadConfig();
+  const { chunkName, clientEntry, clientOutput, outputPublicPath, isDev, fePort } = loadConfig();
   const clientConfig: Configuration = {
     entry: { [`${chunkName}`]: clientEntry },
+    devtool: isDev ? 'cheap-module-source-map' : false,
     output: {
-      path: path.join(projectRoot, 'dist/client'),
-      filename: 'js/[name]_[chunkhash:8].js',
-      chunkFilename: 'js/[name].[contenthash:8].chunk.js',
+      path: clientOutput,
+      publicPath: outputPublicPath,
+      filename:  isDev ? 'static/js/[name].js' : 'static/js/[name].[chunkhash:8].js',
+      chunkFilename:  isDev ? 'static/js/[name].chunk.js' : 'static/js/[name].[contenthash:8].chunk.js',
       clean: true,
     },
     plugins: [
-      new WebpackManifestPlugin({
-        publicPath: '/client/',
+      new ReactRefreshPlugin({
+        overlay: { sockPort: fePort },
       }),
-      new MiniCssExtractPlugin({
-        filename: 'css/[name]_[contenthash:8].css',
+      new WebpackManifestPlugin({}),
+      new WebpackBarPlugin({
+        name: 'client',
+        color: '#45b97c',
       }),
     ],
     optimization: {
+      runtimeChunk: true,
       splitChunks: {
         chunks: 'all',
         cacheGroups: {
@@ -39,26 +44,18 @@ const getClientConfig = () => {
             name: 'vendor'
           }
         }
-      }
-    },
-    module: {
-      rules: [
-        {
-          test: /.css$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            {
-              loader: 'css-loader',
-            },
-          ]
-        },
+      },
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            keep_fnames: true,
+          }
+        })
       ],
     },
   }
 
-  return merge(getBaseConfig(), clientConfig);
+  return merge(getBaseConfig(true), clientConfig);
 }
 
 export {

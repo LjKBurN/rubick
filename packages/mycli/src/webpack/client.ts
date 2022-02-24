@@ -7,22 +7,23 @@ import { loadConfig } from '../server-utils';
 const config = loadConfig();
 
 const startClientServer = async (): Promise<void>  => {
-  const { webpackDevServerConfig, fePort, host } = config;
+  const { webpackDevServerConfig } = config;
   return await new Promise((resolve) => {
     const compiler = webpack(getClientConfig());
-    const server = new WebpackDevServer(compiler, webpackDevServerConfig);
+    const server = new WebpackDevServer(webpackDevServerConfig, compiler);
 
     compiler.hooks.done.tap('DonePlugin', () => {
       resolve()
     })
     
-    server.listen(fePort, host, () => {});
+    server.start();
   });
 }
 
 const startClientBuild = async () => {
-  await webpackPromisify(getClientConfig());
-  console.log('client build done')
+  const { webpackStatsOption } = config;
+  const stats = await webpackPromisify(getClientConfig());
+  console.log('client build done\n', stats?.toString(webpackStatsOption));
 }
 
 export {

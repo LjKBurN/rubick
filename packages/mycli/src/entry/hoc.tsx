@@ -4,22 +4,22 @@ import { DynamicFC, StaticFC, IWindow } from '../../types';
 
 let hasRender = false;
 
-declare const window: IWindow
+declare const window: IWindow;
 
-function wrapComponent(Component: DynamicFC|StaticFC) {
+const wrapComponent = (Component: DynamicFC | StaticFC) => {
   return () => {
-    const [ready, setReady] = useState(Component.name !== 'dynamicComponent')
+    const [ready, setReady] = useState(Component.name !== 'dynamicComponent');
     const [props, setProps] = useState({});
-
+  
     const routerParams = {
       location: useLocation(),
       params: useParams(),
-    }
-
+    };
+  
     useEffect(() => {
       didMount();
     }, []);
-
+  
     const didMount = async () => {
       if (hasRender || !window.__USE_SSR__) {
         console.log('client render');
@@ -40,12 +40,9 @@ function wrapComponent(Component: DynamicFC|StaticFC) {
         }
       }
       hasRender = true;
-    }
-
-    return (
-      ready ? <Component {...props} /> : null
-    )
+    };
+    return ready ? <Component {...props} /> : null;
   }
 }
 
-export { wrapComponent }
+export { wrapComponent };

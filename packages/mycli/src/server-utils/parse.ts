@@ -3,7 +3,6 @@ import { promises as fs } from 'fs';
 import { getCwd, getPagesDir } from './cwd';
 
 const pagePath = getPagesDir();
-const distPath = path.join(getCwd(), './dist');
 const dynamic = true;
 
 export interface ParseFeRouteItem {
@@ -52,7 +51,7 @@ export const parseFeRoutes = async () => {
     // return `"fetch": () => import(/* webpackChunkName: "${currentWebpackChunkName}-fetch" */ '${m2.replace(/\^/g, '"')}')`
     return `"fetch": ${m2.replace(/\\"/g, '"')},`;
   })
-  await fs.writeFile(path.resolve(distPath, './feRoutes.js'), routes);
+  await fs.writeFile(path.resolve(getCwd(), './dist/feRoutes.js'), routes);
 };
 
 const renderRoutes = async (pageDir: string, pathRecord: string[]) => {

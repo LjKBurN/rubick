@@ -1,13 +1,15 @@
 import * as path from 'path';
 import { Configuration } from 'webpack';
-import { getCwd } from '../../server-utils';
+import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { getCwd, loadConfig } from '../../server-utils';
 import { Mode } from '../../../types';
 
 const loadModule = require.resolve
 
 const projectRoot: string = getCwd();
 
-const getBaseConfig = () => {
+const getBaseConfig = (isClient: boolean = false) => {
+  const { isDev } = loadConfig();
   const mode = process.env.NODE_ENV as Mode;
   const baseConfig: Configuration = {
     mode,
@@ -23,6 +25,12 @@ const getBaseConfig = () => {
         'react-router-dom': loadModule('react-router-dom'),
       }
     },
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: isDev ? 'static/css/[name].css' : 'static/css/[name].[contenthash:8].css',
+        chunkFilename: isDev ? 'static/css/[name].chunk.css' : 'static/css/[name].[contenthash:8].chunk.css',
+      }),
+    ],
     module: {
       rules: [
         {
@@ -37,7 +45,10 @@ const getBaseConfig = () => {
                   '@babel/preset-react',
                   '@babel/preset-typescript',
                 ],
-                plugins: ['@babel/plugin-transform-runtime'],
+                plugins: [
+                  '@babel/plugin-transform-runtime',
+                  isClient && isDev && require.resolve('react-refresh/babel')
+                ].filter(Boolean),
               },
             },
           ],
@@ -45,6 +56,12 @@ const getBaseConfig = () => {
         {
           test: /.css$/,
           use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                emit: isClient,
+              },
+            },
             {
               loader: 'css-loader',
             },

@@ -17,7 +17,7 @@ async function render(ctx: Context) {
 
   const { serverRender } = require(serverFile);
   const res = await serverRender(ctx);
-  ctx.body = renderToString(res);
+  return `<!DOCTYPE html>${renderToString(res)}`
 }
 
 export {
