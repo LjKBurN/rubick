@@ -1,0 +1,13 @@
+.cm-header {
+  background-color: red;
+  background-size: 2.04rem auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 0.88rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
