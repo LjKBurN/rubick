@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import { Controller, Get, Injectable } from '../src';
 
-@Injectable
+@Injectable()
 class AllList {
   log() {
     console.log('Ha');
@@ -11,7 +11,6 @@ class AllList {
     return 'list: 1,2,3';
   }
 }
-
 
 @Controller()
 class Xiao {
