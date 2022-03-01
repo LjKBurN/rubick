@@ -1,6 +1,6 @@
 {
   "name": "@ljkburn/snest",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A DI framework besed on Koa",
   "author": "LjK",
   "license": "ISC",
@@ -10,7 +10,8 @@
   "homepage": "https://github.com/LjKBurN/rubick/tree/main/packages/snest#readme",
   "scripts": {
     "dev": "tsnd ./test/index.ts",
-    "build": "rimraf dist && tsc -p tsconfig.json"
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "publish": "yarn run build && npm publish"
   },
   "dependencies": {
     "@types/koa": "^2.11.4",
