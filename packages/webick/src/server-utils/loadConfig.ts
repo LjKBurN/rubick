@@ -8,10 +8,10 @@ const loadConfig = () => {
 
   const isDev = process.env.NODE_ENV !== 'production';
 
-  const clientEntry = join(cwd, './node_modules/@ljkburn/mycli/esm/src/entry/client-entry.js');
+  const clientEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/client-entry.js');
   const clientOutput = join(cwd, './dist/client');
 
-  const serverEntry = join(cwd, './node_modules/@ljkburn/mycli/esm/src/entry/server-entry.js');
+  const serverEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/server-entry.js');
   const serverOutput = join(cwd, './dist/server');
 
   const devPublicPath = '/';

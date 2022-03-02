@@ -15,7 +15,7 @@ const getPagesDir = () => {
 
 const copyContextFile = async () => {
   await promises.copyFile(
-    resolve(getCwd(),'./node_modules/@ljkburn/mycli/src/entry/create-context.ts'),
+    resolve(getCwd(),'./node_modules/@ljkburn/webick/src/entry/create-context.ts'),
     resolve(getCwd(), './dist/create-context.ts')
   );
 }
