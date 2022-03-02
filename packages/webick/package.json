@@ -1,14 +1,14 @@
 {
-  "name": "@ljkburn/mycli",
-  "version": "0.0.3",
-  "description": "a cli",
+  "name": "@ljkburn/webick",
+  "version": "0.0.1",
+  "description": "a react web frame",
   "author": "liaokai02 <liaokai02@maoyan.com>",
-  "homepage": "https://github.com/LjKBurN/rubick/tree/main/packages/mycli#readme",
+  "homepage": "https://github.com/LjKBurN/rubick/tree/main/packages/webick#readme",
   "license": "ISC",
   "main": "./cjs/src/index.js",
   "module": "./esm/src/index.js",
   "bin": {
-    "mycli": "./cjs/src/cli.js"
+    "rubick": "./cjs/src/cli.js"
   },
   "scripts": {
     "build": "concurrently \"tsc -p ./tsconfig.cjs.json --inlineSourceMap false\" \" tsc -p ./tsconfig.esm.json --inlineSourceMap false\"",
