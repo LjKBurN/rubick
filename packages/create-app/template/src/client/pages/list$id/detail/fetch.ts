@@ -1,9 +1,23 @@
-import { FetchFunc } from '@ljkburn/mycli';
+import { FetchFunc } from '@ljkburn/webick';
+import axios from 'axios';
 
-const Fetch: FetchFunc = async ({ routerParams, _isClient }) => {
-  console.log('list', routerParams);
-  const res = _isClient ? await (await fetch('/api/index')).json() : {};
-  return res;
+const Fetch: FetchFunc<{
+  apiService: {
+    index: () => Promise<string>,
+    detail: (id: string) => Promise<string>,
+  }
+}> = async ({ routerParams, _isClient, ctx }) => {
+  const { id } = routerParams.params;
+  let res;
+  if (_isClient) {
+    res = (await axios.post('http://localhost:8080/api/detail', { id })).data;
+  } else {
+    res = await ctx.apiService.detail(id);
+  }
+  return {
+    data: res,
+    id,
+  };
 };
 
 export default Fetch

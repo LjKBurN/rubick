@@ -11,7 +11,7 @@ export default (props) => {
     <div>
       <Search />
       <Header />
-      <div>This is Home Page123</div>
+      <div>This is Home Page</div>
       <div>List</div>
       {
         arr.map((item) => <div key={item}><Link to={`/list/${item}`}>to {item}</Link></div>)

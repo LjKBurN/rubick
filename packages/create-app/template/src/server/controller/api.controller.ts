@@ -1,4 +1,4 @@
-import { Controller, Get, Context } from '@ljkburn/snest';
+import { Controller, Get, Post, Context } from '@ljkburn/snest';
 import { ApiService } from '../service/api.service';
 
 @Controller('api')
@@ -8,6 +8,12 @@ class Api {
   @Get('index')
   async indexRequest(ctx: Context) {
     ctx.body = await this.apiService.index();
+  }
+
+  @Post('detail')
+  async detailRequest(ctx: Context) {
+    const { id } = ctx.request.body;
+    ctx.body = await this.apiService.detail(id);
   }
 }
 

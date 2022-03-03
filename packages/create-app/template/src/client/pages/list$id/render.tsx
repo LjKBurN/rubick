@@ -1,15 +1,20 @@
 import React from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Search from '@components/search';
 
-export default function Home() {
-  const [searchParams] = useSearchParams();
-
+export default function Home(props) {
+  const { id } = props;
+  console.log(props);
   return (
     <div>
       <Search />
-      <span>This is List Page</span>
-      <div>{searchParams.get('q')}</div>
+      <div>
+        <Link to="/">⬅️back</Link>
+      </div>
+      <span>This is List {id} Page</span>
+      <div>
+        <Link to={`/list/${id}/detail`}>see the detail</Link>
+      </div>
     </div>
   );
 }

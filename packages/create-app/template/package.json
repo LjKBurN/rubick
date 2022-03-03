@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "private": "true",
   "scripts": {
-    "start": "mycli start",
-    "dev": "tsnd --ignore-watch \"/Users/ljk/rubick/packages/create-app/template2/dist/server/Page.server.js\" ./src/server/index.ts",
+    "start": "rubick start",
+    "dev": "tsnd --ignore-watch \"./dist/server/Page.server.js\" ./src/server/index.ts",
     "dev:prod": "tsnd ./src/server/index.ts",
-    "build": "mycli build"
+    "build": "rubick build"
   },
   "dependencies": {
-    "@ljkburn/mycli": "^0.0.3",
-    "@ljkburn/snest": "^0.0.1",
+    "@ljkburn/snest": "^0.0.3",
+    "@ljkburn/webick": "^0.0.3",
     "axios": "^0.26.0",
+    "koa-body": "^4.2.0",
     "koa-static": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
