@@ -1,3 +1,3 @@
 export interface proxyOptions {
-  express?: boolean
+  express?: boolean;
 }

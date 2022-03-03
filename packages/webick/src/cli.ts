@@ -12,12 +12,14 @@ const cwd = getCwd();
 const spinnerProcess = fork(resolve(__dirname, './spinner'));
 
 const spinner = {
-  start: () => spinnerProcess.send({
-    message: 'start'
-  }),
-  stop: () => spinnerProcess.send({
-    message: 'stop'
-  })
+  start: () =>
+    spinnerProcess.send({
+      message: 'start',
+    }),
+  stop: () =>
+    spinnerProcess.send({
+      message: 'stop',
+    }),
 };
 
 yargs
@@ -31,14 +33,14 @@ yargs
     spinner.stop();
     await Promise.all([startServerBuild(), startClientServer()]);
     const { stdout, stderr } = exec('yarn run dev', {
-      env: { ...process.env }
+      env: { ...process.env },
     });
     stdout?.on('data', (data) => {
       console.log(data);
     });
     stderr?.on('data', (data) => {
-      console.error(`error: ${data}`)
-    })
+      console.error(`error: ${data}`);
+    });
   })
   .command('build', 'Build files', {}, async (argv) => {
     spinner.start();
@@ -53,9 +55,9 @@ yargs
   .demandCommand(1, 'You need at least one command before moving on')
   .fail((msg, err) => {
     if (err) {
-      console.log(err)
-      process.exit(1)
+      console.log(err);
+      process.exit(1);
     }
-    console.log(msg)
+    console.log(msg);
   })
-  .parse()
+  .parse();

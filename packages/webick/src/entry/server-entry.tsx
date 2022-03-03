@@ -1,12 +1,12 @@
 import React from 'react';
 import { Context } from 'koa';
 import { StaticRouter } from 'react-router-dom/server';
-import { getManifest, findRoute, loadConfig } from '../server-utils';
+import { getManifest, findRoute, loadConfig, parseUrl } from '../server-utils';
 // @ts-expect-error
 import * as MyRoutes from '@dist/feRoutes';
 import { RouteItem } from '../../types';
 // @ts-expect-error
-import Layout from '@client/layout.tsx'
+import Layout from '@client/layout.tsx';
 
 const { FeRoutes } = MyRoutes as unknown as { FeRoutes: RouteItem[] };
 
@@ -26,29 +26,42 @@ const serverRender = async (ctx: Context) => {
 
   const currentFetch = fetch ? (await fetch()).default : null;
 
-  const fetchData  = currentFetch ? await currentFetch({ ctx, _isClient: false }) : {}
+  const routerParams = parseUrl(ctx);
+  const fetchData = currentFetch ? await currentFetch({ routerParams, ctx, _isClient: false }) : {};
 
   const injectScript = [
-    ...jsOrder.map(js => <script key={js} src={manifest[js]} />),
+    ...jsOrder.map((js) => <script key={js} src={manifest[js]} />),
+    <script
+      key="__asyncData"
+      dangerouslySetInnerHTML={{
+        __html: `window.__ASYNC_DATA__=${JSON.stringify(fetchData)}`,
+      }}
+    />,
   ];
-  const injectCss: JSX.Element[] = []
+  const injectCss: JSX.Element[] = [];
 
   let dynamicCssOrder = cssOrder.concat([`${webpackChunkName}.css`]);
-  dynamicCssOrder.forEach(css => {
+  dynamicCssOrder.forEach((css) => {
     if (manifest[css]) {
-      const item = manifest[css]
-      injectCss.push(<link rel='stylesheet' key={item} href={item} />)
+      const item = manifest[css];
+      injectCss.push(<link rel="stylesheet" key={item} href={item} />);
     }
-  })
+  });
 
-  const injectState = isSSR ? <script dangerouslySetInnerHTML={{__html: `window.__USE_SSR__=true;`}} /> : null;
+  const injectState = isSSR ? (
+    <script dangerouslySetInnerHTML={{ __html: `window.__USE_SSR__=true;` }} />
+  ) : null;
   return (
     <StaticRouter location={ctx.request.url}>
-      <Layout injectScript={injectScript} injectCss={injectCss} injectState={injectState} >
+      <Layout
+        injectScript={injectScript}
+        injectCss={injectCss}
+        injectState={injectState}
+      >
         <Component {...fetchData} />
       </Layout>
     </StaticRouter>
-  )
+  );
 };
 
-export { serverRender }
+export { serverRender };

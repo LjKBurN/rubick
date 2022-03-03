@@ -3,4 +3,4 @@ export * from './ctx';
 export * from './react';
 export * from './config';
 
-export type Mode = 'development' |'production'
+export type Mode = 'development' | 'production';

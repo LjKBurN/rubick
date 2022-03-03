@@ -1,12 +1,12 @@
-import { ReactChild } from 'react'
+import { ReactChild } from 'react';
 
-export type IProps<T={}> = T & {
-  children: ReactChild
-}
+export type IProps<T = {}> = T & {
+  children: ReactChild;
+};
 
 export interface Action {
-  type: string
-  payload: object
+  type: string;
+  payload: object;
 }
 
 export interface IContext<T = any> {

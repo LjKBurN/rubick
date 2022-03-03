@@ -1,15 +1,15 @@
-const spinner = require('ora')('正在构建')
+const spinner = require('ora')('正在构建');
 
 interface Message {
-  message: 'start' | 'stop'
+  message: 'start' | 'stop';
 }
 
 process.on('message', (data: Message) => {
-  const { message } = data
+  const { message } = data;
   if (message === 'start') {
-    spinner.start()
+    spinner.start();
   } else {
-    spinner.stop()
-    process.exit()
+    spinner.stop();
+    process.exit();
   }
-})
+});
