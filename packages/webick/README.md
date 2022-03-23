@@ -27,6 +27,8 @@ $ npm init rubick-app yourprojectname
 
 ## 目录结构
 
+<br />
+
 ```
 .
 ├── dist # 构建产物
@@ -52,3 +54,76 @@ $ npm init rubick-app yourprojectname
 ├── package.json
 └── tsconfig.json
 ```
+
+<br/>
+
+---
+
+<br/>
+
+## 前端约定式路由
+
+<br />
+
+通过约定式的文件夹结构来自动生成前端路由的配置
+
+根据 `/src/client/pages` 文件夹来解析前端路由结构，`pages` 文件夹下的每个文件夹都被视为一个页面，约定规则可以参考上一节目录结构里 `pages` 下的目录结构
+
+而在服务端，你只需要在需要渲染页面的路由下调用 `render` 方法，将请求上下午 `ctx` 做为参数传入，之后将会返回经过服务端渲染好的`html` 结构
+
+```ts
+import { Controller, Get, Context } from '@ljkburn/snest';
+import { render } from '@ljkburn/webick';
+
+@Controller()
+class Home {
+  constructor() {}
+
+  @Get()
+  async index(ctx: Context) {
+    ctx.body = await render(ctx);
+  }
+}
+```
+
+<br/>
+
+---
+
+<br/>
+
+## 数据获取
+
+<br/>
+
+每个页面文件夹下的 `fetch.ts` 文件会做为该页面组件数据获取的入口，返回的数据会做为 `props` 传给页面组件
+
+<br/>
+
+### 调用时机
+
+在服务端渲染执行的时候，将会调用 `fetch`，并将数据注入到 `window` 中，在客户端渲染的时候会复用数据。然后在客户端进行前端路由跳转的时候会调用对应页面的 `fetch`
+
+<br/>
+
+### 方法入参
+
+```ts
+interface RouterParams {
+  path: string;
+  search: string;
+  params: any;
+}
+
+interface FetchParams<T> {
+  routerParams: RouterParams;
+  ctx?: MContext<T>;
+  _isClient: boolean;
+}
+
+type FetchFunc<T = {}> = (params: FetchParams<T>) => Promise<any>;
+```
+
+<br/>
+
+
