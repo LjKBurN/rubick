@@ -20,9 +20,28 @@ const copyContextFile = async () => {
   );
 }
 
+const normalizeStartPath = (path: string) => {
+  if (path.startsWith('//')) {
+    path = path.replace('//', '/')
+  }
+  if (!path.startsWith('/')) {
+    path = `/${path}`
+  }
+  return path
+}
+
+const normalizeEndPath = (path: string) => {
+  if (!path.endsWith('/')) {
+    path = `${path}/`
+  }
+  return path
+}
+
 export {
   getCwd,
   getFeDir,
   getPagesDir,
   copyContextFile,
+  normalizeStartPath,
+  normalizeEndPath,
 }

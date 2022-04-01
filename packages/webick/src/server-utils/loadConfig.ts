@@ -1,12 +1,25 @@
-import { join } from 'path';
-import { getCwd } from './cwd';
+import { join, resolve } from 'path';
+import { getCwd, normalizeStartPath, normalizeEndPath } from './cwd';
+
+const loadUserConfig = () => {
+  let config;
+  try {
+    config = require(resolve(getCwd(), './config'));
+  } catch (error) {
+
+  }
+  return config?.userConfig ?? config
+};
 
 const loadConfig = () => {
+  const userConfig = loadUserConfig() || {};
   const cwd = getCwd();
 
   const mode = 'ssr';
 
-  const isDev = process.env.NODE_ENV !== 'production';
+  const isDev = userConfig.isDev ?? process.env.NODE_ENV !== 'production';
+
+  const isVite = userConfig.isVite ?? true;
 
   const clientEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/client-entry.js');
   const clientOutput = join(cwd, './dist/client');
@@ -14,13 +27,15 @@ const loadConfig = () => {
   const serverEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/server-entry.js');
   const serverOutput = join(cwd, './dist/server');
 
-  const devPublicPath = '/';
+  const publicPath = userConfig.publicPath?.startsWith('http') ? userConfig.publicPath : normalizeStartPath(userConfig.publicPath ?? '/');
+  const devPublicPath = publicPath.startsWith('http') ? publicPath.replace(/^http(s)?:\/\/(.*)?\d/, '') : publicPath;
 
   const outputPublicPath = isDev ? devPublicPath : `${devPublicPath}client/`;
 
-  const fePort = 8881;
+  // webpack-dev-server的端口号
+  const fePort = userConfig.fePort ?? 8881;
 
-  const https = false;
+  const https = userConfig.https ?? false;
 
   const serverPort = 8010;
 
@@ -32,9 +47,9 @@ const loadConfig = () => {
 
   const cssOrder = [`${chunkName}.css`];
 
-  const manifestPath = '/manifest.json';
-  const staticPath = '/static';
-  const hotUpdatePath = `/*.hot-update**`;
+  const manifestPath = `${normalizeEndPath(devPublicPath)}asset-manifest.json`
+  const staticPath = `${normalizeEndPath(devPublicPath)}static`
+  const hotUpdatePath = `${normalizeEndPath(devPublicPath)}*.hot-update**`
 
   const proxyKey = [manifestPath, staticPath, hotUpdatePath];
 
@@ -70,6 +85,7 @@ const loadConfig = () => {
   
   const config = {
     mode,
+    isVite,
     chunkName,
     clientEntry,
     clientOutput,
