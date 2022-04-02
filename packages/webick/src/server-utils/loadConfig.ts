@@ -47,7 +47,7 @@ const loadConfig = () => {
 
   const cssOrder = [`${chunkName}.css`];
 
-  const manifestPath = `${normalizeEndPath(devPublicPath)}asset-manifest.json`
+  const manifestPath = `${normalizeEndPath(devPublicPath)}manifest.json`
   const staticPath = `${normalizeEndPath(devPublicPath)}static`
   const hotUpdatePath = `${normalizeEndPath(devPublicPath)}*.hot-update**`
 
