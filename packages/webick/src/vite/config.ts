@@ -30,9 +30,6 @@ const commonConfig = (): UserConfig => {
 const serverConfig = (): UserConfig => {
   return {
     ...commonConfig(),
-    ssr: {
-      external: ['react-router-dom'],
-    }
   }
 }
 
