@@ -20,7 +20,11 @@ const getServerConfig = () => {
       clean: true,
     },
     externalsPresets: { node: true },
-    externals: [nodeExternals()],
+    externals: [
+      nodeExternals(),
+      'vite',
+      'esbuild',
+    ],
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,

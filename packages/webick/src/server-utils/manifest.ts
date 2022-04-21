@@ -1,19 +1,22 @@
 import { join } from 'path'
 import { getCwd } from './cwd';
 import axios from 'axios';
-import { loadConfig } from './loadConfig';
+import { IConfig} from '../../types';
 
 const instance = axios.create({
   timeout: 3000,
   proxy: false
 })
 
-const getManifest = async (): Promise<Record<string, string>> => {
-  const { isDev, fePort, https, manifestPath } = loadConfig();
+const getManifest = async (config: IConfig): Promise<Record<string, string>> => {
+  const { isDev, isVite, fePort, https, manifestPath } = config;
   let manifest = {};
   if (isDev) {
-    const res = await instance.get(`${https ? 'https' : 'http'}://localhost:${fePort}${manifestPath}`);
-    manifest = res.data;
+    if (!isVite) {
+      console.log(`${https ? 'https' : 'http'}://localhost:${fePort}${manifestPath}`);
+      const res = await instance.get(`${https ? 'https' : 'http'}://localhost:${fePort}${manifestPath}`);
+      manifest = res.data;
+    }
   } else {
     // @ts-expect-error
     const requireFunc = typeof __webpack_require__ === "function" ? __non_webpack_require__ : require;

@@ -1,17 +1,20 @@
 import { join, resolve } from 'path';
-import { getCwd, normalizeStartPath, normalizeEndPath } from './cwd';
+import { getCwd, normalizeStartPath, normalizeEndPath, transformConfig } from './cwd';
+import { IConfig, UserConfig } from '../../types';
 
-const loadUserConfig = () => {
-  let config;
+
+const loadUserConfig = (): UserConfig => {
+  let config
   try {
-    config = require(resolve(getCwd(), './config'));
+    config = require(resolve(getCwd(), './dist/config'))
   } catch (error) {
-
+    transformConfig()
+    config = require(resolve(getCwd(), './dist/config'))
   }
-  return config?.userConfig ?? config
+  return config.userConfig ?? config
 };
 
-const loadConfig = () => {
+const loadConfig = (): IConfig => {
   const userConfig = loadUserConfig() || {};
   const cwd = getCwd();
 
@@ -19,7 +22,7 @@ const loadConfig = () => {
 
   const isDev = userConfig.isDev ?? process.env.NODE_ENV !== 'production';
 
-  const isVite = userConfig.isVite ?? true;
+  const isVite = process.env.BUILD_TOOL === 'vite';
 
   const clientEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/client-entry.js');
   const clientOutput = join(cwd, './dist/client');
@@ -111,4 +114,5 @@ const loadConfig = () => {
 
 export {
   loadConfig,
+  loadUserConfig,
 }

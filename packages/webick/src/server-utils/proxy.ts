@@ -14,10 +14,10 @@ const initDevProxy = async (app: any, options?: proxyOptions) => {
 const kc = koaConnect.default || koaConnect;
 
 const getDevProxyMiddlewares = async (options?: proxyOptions) => {
-  const { isDev, proxyKey, https, fePort } = loadConfig();
+  const { isDev, isVite, proxyKey, https, fePort } = loadConfig();
   const express = options ? options.express : false;
   const proxyMiddlewaresArr: any[] = [];
-  
+
   function registerProxy (proxy: any) {
     for (const path in proxy) {
       const options = proxy[path];
@@ -27,18 +27,25 @@ const getDevProxyMiddlewares = async (options?: proxyOptions) => {
   }
 
   if (isDev) {
-    const remoteStaticServerOptions = {
-      target: `${https ? 'https' : 'http'}://127.0.0.1:${fePort}`,
-      changeOrigin: true,
-      secure: false,
-      logLevel: 'warn'
+    if (isVite) {
+      const { createServer } = require('vite');
+      const { clientConfig } = require('../vite');
+      const viteServer = await createServer(clientConfig());
+      proxyMiddlewaresArr.push(express ? viteServer.middlewares : kc(viteServer.middlewares))
+    } else {
+      const remoteStaticServerOptions = {
+        target: `${https ? 'https' : 'http'}://127.0.0.1:${fePort}`,
+        changeOrigin: true,
+        secure: false,
+        logLevel: 'warn'
+      }
+      const proxyPathMap: Record<string, any> = {};
+  
+      for (const key of proxyKey) {
+        proxyPathMap[key] = remoteStaticServerOptions;
+      }
+      registerProxy(proxyPathMap)
     }
-    const proxyPathMap: Record<string, any> = {};
-
-    for (const key of proxyKey) {
-      proxyPathMap[key] = remoteStaticServerOptions;
-    }
-    registerProxy(proxyPathMap)
   }
   return proxyMiddlewaresArr;
 }
