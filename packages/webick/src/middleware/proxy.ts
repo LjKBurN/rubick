@@ -1,7 +1,7 @@
 import { createProxyMiddleware } from 'http-proxy-middleware';
 // @ts-expect-error
 import * as koaConnect from 'koa2-connect';
-import { loadConfig } from './loadConfig';
+import { loadConfig } from '../server-utils';
 import { proxyOptions } from '../../types';
 
 const initDevProxy = async (app: any, options?: proxyOptions) => {

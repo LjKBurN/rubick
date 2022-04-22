@@ -21,6 +21,9 @@ const commonConfig = (): UserConfig => {
       },
       extensions: ['.mjs', '.ts', '.jsx', '.tsx', '.json', '.js'],
     },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-router-dom', 'axios'],
+    },
     plugins: [
       react()
     ],
