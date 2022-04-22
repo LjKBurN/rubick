@@ -1,8 +1,9 @@
 {
-  "extends": "./tsconfig",
+  "extends": "../../tsconfig.cjs.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES2018",
     "outDir": "./cjs"
-  }
+  },
+  "include": [
+    "src/*.ts"
+  ]
 }

@@ -1,8 +1,9 @@
 {
-  "extends": "./tsconfig",
+  "extends": "../../tsconfig.esm.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES2018",
     "outDir": "./esm"
   },
+  "include": [
+    "src/*.ts"
+  ]
 }
