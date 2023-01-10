@@ -12,12 +12,11 @@
     "init": "./bin/index.js"
   },
   "dependencies": {
-    "@types/yargs": "^17.0.8",
     "cross-env": "^7.0.3",
-    "shelljs": "^0.8.5",
-    "typescript": "^4.5.5"
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
+    "@types/yargs": "^17.0.8",
     "@types/shelljs": "^0.8.11"
   }
 }
