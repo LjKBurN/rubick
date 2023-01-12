@@ -4,24 +4,25 @@
   "private": "true",
   "scripts": {
     "start": "rubick start",
+    "start:vite": "rubick start --vite",
     "dev": "tsnd --ignore-watch \"./dist/server/Page.server.js\" ./src/server/index.ts",
-    "dev:prod": "tsnd ./src/server/index.ts",
+    "dev:prod": "NODE_ENV=production tsnd ./src/server/index.ts",
     "build": "rubick build"
   },
   "dependencies": {
     "@ljkburn/snest": "^0.0.3",
-    "@ljkburn/webick": "^0.0.3",
+    "@ljkburn/webick": "^0.0.8",
     "axios": "^0.26.0",
     "koa-body": "^4.2.0",
     "koa-static": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",
-    "ts-node-dev": "^1.1.8",
-    "tsconfig-paths": "^3.12.0"
+    "ts-node-dev": "v2.0.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.11"
+    "@types/react-dom": "^17.0.11",
+    "typescript": "^4.5.5"
   }
 }
