@@ -58,6 +58,7 @@ yargs
 
     rm('-rf', resolve(cwd, './dist'));
     mkdir(resolve(cwd, './dist'));
+    transformConfig();
     await parseFeRoutes();
     await copyContextFile();
 

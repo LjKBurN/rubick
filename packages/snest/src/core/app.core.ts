@@ -1,4 +1,4 @@
-import Koa from 'koa';
+import Koa, { DefaultContext, DefaultState } from 'koa';
 import 'reflect-metadata';
 import Router from 'koa-router';
 import fs from 'fs';
@@ -26,7 +26,7 @@ class AppCore extends Koa {
 
   use<NewStateT = {}, NewCustomT = {}>(
     middleware: Koa.Middleware<NewStateT, NewCustomT>,
-  ): Koa<NewStateT, NewCustomT> {
+  ): Koa<NewStateT & DefaultState, NewCustomT & DefaultContext> {
     this.trace.setNode('middle', middleware.name);
     return super.use(
       async function (ctx, next) {

@@ -63,6 +63,7 @@ const transformConfig = () => {
     }
     if (accessFileSync(resolve(cwd, './config.ts'))) {
       fileContent = readFileSync(resolve(cwd, './config.ts')).toString()
+      loader = 'ts';
     }
     const { code } = transformSync(fileContent, {
       loader,

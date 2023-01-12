@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { getCwd } from './cwd';
 import axios from 'axios';
-import { IConfig} from '../../types';
+import { IConfig } from '../../types';
 
 const instance = axios.create({
   timeout: 3000,
@@ -13,7 +13,6 @@ const getManifest = async (config: IConfig): Promise<Record<string, string>> => 
   let manifest = {};
   if (isDev) {
     if (!isVite) {
-      console.log(`${https ? 'https' : 'http'}://localhost:${fePort}${manifestPath}`);
       const res = await instance.get(`${https ? 'https' : 'http'}://localhost:${fePort}${manifestPath}`);
       manifest = res.data;
     }
