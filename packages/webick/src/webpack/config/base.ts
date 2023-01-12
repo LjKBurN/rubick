@@ -25,6 +25,9 @@ const getBaseConfig = (isClient: boolean = false) => {
         'react-router-dom': loadModule('react-router-dom'),
       }
     },
+    resolveLoader: {
+      modules: ['node_modules', 'node_modules/@ljkburn/webick/node_modules'],
+    },
     plugins: [
       new MiniCssExtractPlugin({
         filename: isDev ? 'static/css/[name].css' : 'static/css/[name].[contenthash:8].css',
