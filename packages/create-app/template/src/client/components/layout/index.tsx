@@ -1,8 +1,5 @@
 import React from 'react';
-
-const App = (props: any) => {
-  return props.children! 
-}
+import App from './App';
 
 export default function Layout(props) {
   const { injectScript, injectCss, injectState } = props;

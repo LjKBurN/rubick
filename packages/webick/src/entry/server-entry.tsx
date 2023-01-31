@@ -6,7 +6,7 @@ import { getManifest, findRoute, parseUrl } from '../server-utils';
 import * as MyRoutes from '@dist/feRoutes';
 import { RouteItem, IConfig } from '../../types';
 // @ts-expect-error
-import Layout from '@client/layout.tsx';
+import Layout from '@components/layout/index';
 
 const { FeRoutes } = MyRoutes as unknown as { FeRoutes: RouteItem[] };
 
