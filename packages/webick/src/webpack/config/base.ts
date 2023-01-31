@@ -50,14 +50,22 @@ const getBaseConfig = (isClient: boolean = false) => {
                 ],
                 plugins: [
                   '@babel/plugin-transform-runtime',
-                  isClient && isDev && require.resolve('react-refresh/babel')
+                  [
+                    'babel-plugin-import',
+                    {
+                      libraryName: 'antd',
+                      libraryDirectory: 'lib',
+                      style: true,
+                    }, 'antd'
+                  ],
+                  isClient && isDev && require.resolve('react-refresh/babel'),
                 ].filter(Boolean),
               },
             },
           ],
         },
         {
-          test: /.css$/,
+          test: /\.css$/,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
@@ -67,7 +75,37 @@ const getBaseConfig = (isClient: boolean = false) => {
             },
             {
               loader: 'css-loader',
+              options: {
+                modules: { auto: true },
+                importLoaders: 1,
+              },
             },
+          ]
+        },
+        {
+          test: /\.less$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                emit: isClient,
+              },
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                modules: { auto: true },
+                importLoaders: 1,
+              },
+            },
+            {
+              loader: 'less-loader',
+              options: {
+                lessOptions: {
+                  javascriptEnabled: true,
+                },
+              },
+            }
           ]
         },
       ],

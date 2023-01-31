@@ -21,7 +21,9 @@ const getServerConfig = () => {
     },
     externalsPresets: { node: true },
     externals: [
-      nodeExternals(),
+      nodeExternals({
+        allowlist: [/\.(css|less|sass|scss)$/, /antd.*?(style)/],
+      }),
       'vite',
       'esbuild',
     ],

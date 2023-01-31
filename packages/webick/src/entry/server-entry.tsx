@@ -46,6 +46,14 @@ const serverRender = async (ctx: Context, config: IConfig) => {
   const injectCss: JSX.Element[] = [];
 
   let dynamicCssOrder = cssOrder.concat([`${webpackChunkName}.css`]);
+
+  // 引入被 mini-css-extract-plugin 分离的按需引入样式文件（antd）
+  Object.keys(manifest).forEach((name) => {
+    if (name.startsWith('static/css/')) {
+      dynamicCssOrder.push(name);
+    }
+  });
+
   dynamicCssOrder.forEach((css) => {
     if (manifest[css]) {
       const item = manifest[css];
