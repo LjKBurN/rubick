@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { getCwd } from '../server-utils';
 import { UserConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { createStyleImportPlugin, AntdResolve } from 'ssr-vite-plugin-style-import';
 
 const cwd = getCwd();
 
@@ -25,8 +26,18 @@ const commonConfig = (): UserConfig => {
       include: ['react', 'react-dom', 'react-router-dom', 'axios'],
     },
     plugins: [
-      react()
+      react(),
+      createStyleImportPlugin({
+        resolves: [AntdResolve()],
+      }),
     ],
+    css: {
+      preprocessorOptions: {
+        less: {
+          javascriptEnabled: true,
+        },
+      },
+    },
   }
 }
 
