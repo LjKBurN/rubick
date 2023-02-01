@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ljkburn/snest": "^0.0.3",
-    "@ljkburn/webick": "^0.0.8",
+    "@ljkburn/webick": "^0.0.10",
     "axios": "^0.26.0",
     "koa-body": "^4.2.0",
     "koa-static": "^5.0.0",
