@@ -1,14 +1,13 @@
-import App from '@ljkburn/snest';
+import App from 'snest';
 import path from 'path';
 import koaStatic from 'koa-static';
 import koaBody from 'koa-body';
-import { initDevProxy, getCwd } from '@ljkburn/webick';
+import { initDevProxy } from 'webick';
 import './controller';
 
 const staticPath = path.join(process.cwd(), './dist');
 
 async function start() {
-  process.env.NODE_ENV = 'development';
   const app = new App();
 
   // koa-body中间件需在注册路由前使用
@@ -16,7 +15,7 @@ async function start() {
 
   app.routes();
 
-  // 在开发环境时会代理资源请求到webpack-dev-server
+  // webpack打包在开发环境时会代理资源请求到webpack-dev-server
   await initDevProxy(app);
   app.use(koaStatic(staticPath));
 

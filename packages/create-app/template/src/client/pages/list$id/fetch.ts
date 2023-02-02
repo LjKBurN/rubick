@@ -1,4 +1,4 @@
-import { FetchFunc } from '@ljkburn/webick';
+import { FetchFunc } from 'webick';
 import axios from 'axios';
 
 const Fetch: FetchFunc = async ({ routerParams, _isClient, ctx }) => {

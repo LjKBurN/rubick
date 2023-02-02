@@ -1,6 +1,6 @@
 {
-  "name": "@ljkburn/snest",
-  "version": "0.0.3",
+  "name": "snest",
+  "version": "1.0.1",
   "description": "A DI framework besed on Koa",
   "author": "LjK",
   "license": "ISC",

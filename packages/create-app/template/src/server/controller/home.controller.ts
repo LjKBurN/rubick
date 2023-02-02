@@ -1,5 +1,5 @@
-import { Controller, Get, Context } from '@ljkburn/snest';
-import { render } from '@ljkburn/webick';
+import { Controller, Get, Context } from 'snest';
+import { render } from 'webick';
 import { ApiService } from '../service/api.service';
 
 @Controller()

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { STORE_CONTEXT } from '@dist/create-context';
-import { IContext } from '@ljkburn/webick';
+import { IContext } from 'webick';
 import './index.css';
 
 function Search() {

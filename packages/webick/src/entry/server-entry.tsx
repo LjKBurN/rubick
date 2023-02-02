@@ -39,7 +39,7 @@ const serverRender = async (ctx: Context, config: IConfig) => {
     (isDev && isVite) && <script key="windowVite" dangerouslySetInnerHTML={{
       __html: 'window.__USE_VITE__=true',
     }}/>,
-    (isDev && isVite) && <script key="viteEntry" src="/node_modules/@ljkburn/webick/esm/src/entry/client-entry.js" type="module" />,
+    (isDev && isVite) && <script key="viteEntry" src="/node_modules/webick/esm/src/entry/client-entry.js" type="module" />,
     ...jsOrder.map((js) => <script key={js} src={manifest[js]} type={isVite ? 'module' : ''} />),
   ];
 

@@ -26,7 +26,7 @@ const getBaseConfig = (isClient: boolean = false) => {
       }
     },
     resolveLoader: {
-      modules: ['node_modules', 'node_modules/@ljkburn/webick/node_modules'],
+      modules: ['node_modules', 'node_modules/webick/node_modules'],
     },
     plugins: [
       new MiniCssExtractPlugin({

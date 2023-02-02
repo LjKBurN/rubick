@@ -24,10 +24,10 @@ const loadConfig = (): IConfig => {
 
   const isVite = process.env.BUILD_TOOL === 'vite';
 
-  const clientEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/client-entry.js');
+  const clientEntry = join(cwd, './node_modules/webick/esm/src/entry/client-entry.js');
   const clientOutput = join(cwd, './dist/client');
 
-  const serverEntry = join(cwd, './node_modules/@ljkburn/webick/esm/src/entry/server-entry.js');
+  const serverEntry = join(cwd, './node_modules/webick/esm/src/entry/server-entry.js');
   const serverOutput = join(cwd, './dist/server');
 
   const publicPath = userConfig.publicPath?.startsWith('http') ? userConfig.publicPath : normalizeStartPath(userConfig.publicPath ?? '/');

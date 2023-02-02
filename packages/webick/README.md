@@ -72,8 +72,8 @@ $ npm init rubick-app yourprojectname
 而在服务端，你只需要在需要渲染页面的路由下调用 `render` 方法，将请求上下午 `ctx` 做为参数传入，之后将会返回经过服务端渲染好的`html` 结构
 
 ```ts
-import { Controller, Get, Context } from '@ljkburn/snest';
-import { render } from '@ljkburn/webick';
+import { Controller, Get, Context } from 'snest';
+import { render } from 'webick';
 
 @Controller()
 class Home {

@@ -1,4 +1,4 @@
-import { Injectable } from '@ljkburn/snest';
+import { Injectable } from 'snest';
 
 @Injectable()
 export class ApiService {

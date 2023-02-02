@@ -7,7 +7,7 @@
 ## Install
 
 ```
- $ yarn add @ljkburn/snest
+ $ yarn add snest
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ server.ts
 在提供服务的类上使用 Injectable 装饰器，该类被视为一个 Providers 提供者
 
 ```ts
-import { Injectable } from '@ljkburn/snest';
+import { Injectable } from 'snest';
 
 @Injectable()
 class AppService {
@@ -40,7 +40,7 @@ controller.ts
 ctx 就是 Koa 中的 Context
 
 ```ts
-import { Controller, Get, Context } from '@ljkburn/snest';
+import { Controller, Get, Context } from 'snest';
 import { AppService } from './service.ts';
 
 @Controller('/api')
@@ -72,7 +72,7 @@ index.ts
 
 
 ```ts
-import App from '@ljkburn/snest';
+import App from 'snest';
 import './controller.ts';
 
 const app = new App();

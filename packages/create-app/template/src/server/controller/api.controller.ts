@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Context } from '@ljkburn/snest';
+import { Controller, Get, Post, Context } from 'snest';
 import { ApiService } from '../service/api.service';
 
 @Controller('api')
