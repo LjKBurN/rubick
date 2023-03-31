@@ -4,11 +4,14 @@ import { StaticRouter } from 'react-router-dom/server';
 import { getManifest, findRoute, parseUrl } from '../server-utils';
 // @ts-expect-error
 import * as MyRoutes from '@dist/feRoutes';
-import { RouteItem, IConfig } from '../../types';
+// @ts-expect-error
+import { STORE_CONTEXT } from '@dist/create-context'
 // @ts-expect-error
 import Layout from '@components/layout/index';
 
-const { FeRoutes } = MyRoutes as unknown as { FeRoutes: RouteItem[] };
+import { RoutesType, IConfig } from '../../types';
+
+const { FeRoutes, layoutFetch } = MyRoutes as unknown as RoutesType;
 
 
 const serverRender = async (ctx: Context, config: IConfig) => {
@@ -27,13 +30,16 @@ const serverRender = async (ctx: Context, config: IConfig) => {
   const currentFetch = fetch ? (await fetch()).default : null;
 
   const routerParams = parseUrl(ctx);
+  const layoutFetchData = layoutFetch ? await layoutFetch({ routerParams, ctx, _isClient: false }) : {};
   const fetchData = currentFetch ? await currentFetch({ routerParams, ctx, _isClient: false }) : {};
+
+  const combineData = Object.assign(layoutFetchData, fetchData);
 
   const injectScript = [
     <script
       key="__asyncData"
       dangerouslySetInnerHTML={{
-        __html: `window.__ASYNC_DATA__=${JSON.stringify(fetchData)}`,
+        __html: `window.__ASYNC_DATA__=${JSON.stringify(combineData)}`,
       }}
     />,
     (isDev && isVite) && <script key="windowVite" dangerouslySetInnerHTML={{
@@ -77,13 +83,15 @@ const serverRender = async (ctx: Context, config: IConfig) => {
   ) : null;
   return (
     <StaticRouter location={ctx.request.url}>
-      <Layout
-        injectScript={injectScript}
-        injectCss={injectCss}
-        injectState={injectState}
-      >
-        <Component {...fetchData} />
-      </Layout>
+      <STORE_CONTEXT.Provider value={{ state: combineData }}>
+        <Layout
+          injectScript={injectScript}
+          injectCss={injectCss}
+          injectState={injectState}
+        >
+          <Component {...combineData} />
+        </Layout>
+      </STORE_CONTEXT.Provider>
     </StaticRouter>
   );
 };

@@ -40,3 +40,8 @@ export type RouteItem<T = {}, U = {}> = {
   component: DynamicFC<T>;
   webpackChunkName: string;
 } & U;
+
+export interface RoutesType {
+  layoutFetch?: FetchFunc;
+  FeRoutes: RouteItem[];
+}

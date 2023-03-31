@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { DynamicFC, StaticFC, IWindow } from '../../types';
+import { DynamicFC, StaticFC, IWindow, IContext } from '../../types';
+// @ts-expect-error
+import { STORE_CONTEXT } from '@dist/create-context';
 
 let hasRender = false;
 
@@ -10,6 +12,7 @@ const wrapComponent = (Component: DynamicFC | StaticFC) => {
   return () => {
     const [ready, setReady] = useState(Component.name !== 'dynamicComponent');
     const [props, setProps] = useState(window?.__ASYNC_DATA__ || {});
+    const { dispatch } = useContext<IContext>(STORE_CONTEXT)
 
     const location = useLocation();
     const routerParams = {
@@ -28,11 +31,20 @@ const wrapComponent = (Component: DynamicFC | StaticFC) => {
         // csr 情况首次访问页面也需要调用 fetch
         const { fetch, layoutFetch } = Component;
         let asyncData = {};
+        let asyncLayoutData = {}
         if (fetch) {
           const fetchFn = await fetch();
           asyncData = await fetchFn.default({ routerParams, _isClient: true });
         }
-        setProps(asyncData);
+        if (layoutFetch) {
+          asyncLayoutData = await layoutFetch({ routerParams, _isClient: true });
+        }
+        const combineData = Object.assign(asyncData, asyncLayoutData);
+        dispatch?.({
+          type: 'updateContext',
+          payload: combineData
+        });
+        setProps(combineData);
         if (Component.name === 'dynamicComponent') {
           Component = (await (Component as DynamicFC)()).default;
           Component.fetch = fetch;

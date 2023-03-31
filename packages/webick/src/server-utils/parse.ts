@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { promises as fs } from 'fs';
-import { getCwd, getPagesDir } from './cwd';
+import { getCwd, getFeDir, getPagesDir, accessFile } from './cwd';
 
 const pagePath = getPagesDir();
 const dynamic = true;
@@ -29,8 +29,10 @@ export const parseFeRoutes = async () => {
       item.fetch = `() => import(/* webpackChunkName: "${webpackChunkName}-fetch" */ '${fetch}')`;
     }
   });
+  const layoutFetch = await accessFile(path.join(getFeDir(), './components/layout/fetch.ts'))
   let routes = `
     export const FeRoutes = ${JSON.stringify(arr)}
+    ${layoutFetch ? 'export { default as layoutFetch } from "@components/layout/fetch"' : ''}
   `;
   const re = /"webpackChunkName":("(.+?)")/g
   routes = routes.replace(/"component":("(.+?)",)/g, (global, m1, m2) => {

@@ -2,11 +2,13 @@ import React, { useReducer } from 'react';
 // @ts-expect-error
 import { STORE_CONTEXT } from '@dist/create-context';
 
-import { Action, IProps } from '../../types';
+import { Action, IProps, IWindow } from '../../types';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-const defaultState = {};
+declare const window: IWindow;
+
+const defaultState = Object.assign({}, window.__ASYNC_DATA__);
 
 function defaultReducer(state: any, action: Action) {
   switch (action.type) {

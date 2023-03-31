@@ -37,6 +37,13 @@ const normalizeEndPath = (path: string) => {
   return path
 }
 
+const accessFile = async (file: string) => {
+  const result = await promises.access(file)
+    .then(() => true)
+    .catch(() => false)
+  return result
+}
+
 const accessFileSync = (file: string) => {
   let res = true
   try {
@@ -76,6 +83,8 @@ const transformConfig = () => {
 }
 
 export {
+  accessFile,
+  accessFileSync,
   getCwd,
   getFeDir,
   getPagesDir,

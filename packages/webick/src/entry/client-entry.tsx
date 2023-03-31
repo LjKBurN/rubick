@@ -7,9 +7,9 @@ import * as MyRoutes from '@dist/feRoutes.js';
 import { wrapComponent } from './hoc';
 import { AppContext } from './context';
 
-import { RouteItem, IWindow } from '../../types';
+import { RoutesType, IWindow } from '../../types';
 
-const { FeRoutes } = MyRoutes as unknown as { FeRoutes: RouteItem[] };
+const { FeRoutes, layoutFetch } = MyRoutes as unknown as RoutesType;
 
 declare const window: IWindow;
 
@@ -32,6 +32,7 @@ const clientRender = async () => {
           {FeRoutes.map((item) => {
             const { component, fetch, path } = item;
             component.fetch = fetch;
+            component.layoutFetch = layoutFetch;
             const WrappedComponent = wrapComponent(component);
             return (
               <Route key={path} path={path} element={<WrappedComponent />} />
