@@ -23,6 +23,12 @@ export interface IConfig {
   proxyKey: string[],
   webpackDevServerConfig?: any,
   webpackStatsOption: any,
+  css?: {
+    loaderOptions?: {
+      cssOptions?: any;
+      less?: any;
+    }
+  }
 }
 
 export interface UserConfig {
@@ -31,4 +37,10 @@ export interface UserConfig {
   https?: boolean;
   fePort?: number;
   publicPath?: string;
+  css?: {
+    loaderOptions?: {
+      cssOptions?: any;
+      less?: any;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { getCwd } from '../server-utils';
+import { getCwd, loadConfig } from '../server-utils';
 import { UserConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { createStyleImportPlugin, AntdResolve } from 'ssr-vite-plugin-style-import';
@@ -7,6 +7,7 @@ import { createStyleImportPlugin, AntdResolve } from 'ssr-vite-plugin-style-impo
 const cwd = getCwd();
 
 const commonConfig = (): UserConfig => {
+  const { css } = loadConfig();
   return {
     root: cwd,
     mode: 'development',
@@ -35,6 +36,7 @@ const commonConfig = (): UserConfig => {
       preprocessorOptions: {
         less: {
           javascriptEnabled: true,
+          ...css?.loaderOptions?.less,
         },
       },
     },

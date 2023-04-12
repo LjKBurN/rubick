@@ -107,6 +107,7 @@ const loadConfig = (): IConfig => {
     proxyKey,
     webpackDevServerConfig,
     webpackStatsOption,
+    css: userConfig?.css || {},
   }
 
   return config;

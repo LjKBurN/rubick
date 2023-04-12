@@ -9,7 +9,7 @@ const loadModule = require.resolve
 const projectRoot: string = getCwd();
 
 const getBaseConfig = (isClient: boolean = false) => {
-  const { isDev } = loadConfig();
+  const { isDev, css } = loadConfig();
   const mode = process.env.NODE_ENV as Mode;
   const baseConfig: Configuration = {
     mode,
@@ -96,6 +96,7 @@ const getBaseConfig = (isClient: boolean = false) => {
               options: {
                 modules: { auto: true },
                 importLoaders: 1,
+                ...css?.loaderOptions?.cssOptions,
               },
             },
             {
@@ -103,11 +104,19 @@ const getBaseConfig = (isClient: boolean = false) => {
               options: {
                 lessOptions: {
                   javascriptEnabled: true,
+                  ...css?.loaderOptions?.less,
                 },
               },
             }
           ]
         },
+        {
+          test: /.(png|svg|jpg|gif|jpeg)$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'static/image/[name]_[hash:8][ext][query]',
+          },
+        }
       ],
     },
   }
