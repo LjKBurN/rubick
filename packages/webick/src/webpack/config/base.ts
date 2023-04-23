@@ -1,4 +1,4 @@
-import * as path from 'path';
+import { join, resolve} from 'path';
 import { Configuration } from 'webpack';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { getCwd, loadConfig } from '../../server-utils';
@@ -16,13 +16,14 @@ const getBaseConfig = (isClient: boolean = false) => {
     resolve: {
       extensions: ['.js', '.json', '.ts', '.tsx'],
       alias: {
-        '@src': path.resolve(projectRoot, './src'),
-        '@dist': path.resolve(projectRoot, './dist'),
-        '@client': path.join(projectRoot, './src/client'),
-        '@components': path.join(projectRoot, './src/client/components'),
-        'react': loadModule('react'), 
+        '@src': resolve(projectRoot, './src'),
+        '@dist': resolve(projectRoot, './dist'),
+        '@client': join(projectRoot, './src/client'),
+        '@components': join(projectRoot, './src/client/components'),
         'react-dom': loadModule('react-dom'),
         'react-router-dom': loadModule('react-router-dom'),
+        'react/jsx-runtime': loadModule('react/jsx-runtime'),
+        'react/jsx-dev-runtime': loadModule('react/jsx-dev-runtime'),
       }
     },
     resolveLoader: {
@@ -45,7 +46,9 @@ const getBaseConfig = (isClient: boolean = false) => {
               options: {
                 presets: [
                   '@babel/preset-env',
-                  '@babel/preset-react',
+                  ['@babel/preset-react', {
+                    runtime: 'automatic',
+                  }],
                   '@babel/preset-typescript',
                 ],
                 plugins: [
