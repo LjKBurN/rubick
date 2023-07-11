@@ -33,6 +33,7 @@ const getBaseConfig = (isClient: boolean = false) => {
       new MiniCssExtractPlugin({
         filename: isDev ? 'static/css/[name].css' : 'static/css/[name].[contenthash:8].css',
         chunkFilename: isDev ? 'static/css/[name].chunk.css' : 'static/css/[name].[contenthash:8].chunk.css',
+        ignoreOrder: true,
       }),
     ],
     module: {
