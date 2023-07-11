@@ -71,7 +71,7 @@ const loadConfig = (): IConfig => {
     host,
     hot: true,
     static: {
-      directory: './dist',
+      directory: join(cwd, './dist'),
       publicPath: devPublicPath,
     },
     port: fePort,
