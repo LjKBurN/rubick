@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { PassThrough, Readable } from 'stream';
+import { PassThrough } from 'stream';
 import { renderToString, renderToNodeStream } from 'react-dom/server';
 import { Context } from 'koa';
 import type { ViteDevServer } from 'vite';
