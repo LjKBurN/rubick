@@ -18,7 +18,9 @@ const loadConfig = (): IConfig => {
   const userConfig = loadUserConfig() || {};
   const cwd = getCwd();
 
-  const mode = 'ssr';
+  const mode = userConfig?.mode ?? 'ssr';
+
+  const stream = userConfig?.stream ?? false;
 
   const isDev = userConfig.isDev ?? process.env.NODE_ENV !== 'production';
 
@@ -86,8 +88,9 @@ const loadConfig = (): IConfig => {
     },
   };
   
-  const config = {
+  const config: IConfig = {
     mode,
+    stream,
     isVite,
     chunkName,
     clientEntry,

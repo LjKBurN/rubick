@@ -1,21 +1,34 @@
 import * as path from 'path';
-import { renderToString } from 'react-dom/server';
+import { PassThrough, Readable } from 'stream';
+import { renderToString, renderToNodeStream } from 'react-dom/server';
 import { Context } from 'koa';
 import type { ViteDevServer } from 'vite';
 import { getCwd, loadConfig } from '../server-utils';
 import { serverConfig as viteConfig } from '../vite';
+import { RenderConfig, IConfig } from '../../types';
 
 const cwd = getCwd();
-const config = loadConfig();
+const defaultConfig = loadConfig();
 
-async function render(ctx: Context) {
-  const { isDev, isVite } = config;
-  const res = isVite && isDev ? await viteRender(ctx) : await commonRender(ctx);
-  return `<!DOCTYPE html>${renderToString(res)}`;
+function render(ctx: Context, options?: RenderConfig & { stream: true }): Promise<PassThrough>
+function render(ctx: Context, options?: RenderConfig & { stream: false }): Promise<string>
+
+async function render(ctx: Context, options?: RenderConfig) {
+  const config = Object.assign(defaultConfig, options ?? {});
+  const { isDev, isVite, stream } = config;
+  const res = isVite && isDev ? await viteRender(ctx, config) : await commonRender(ctx, config);
+
+  ctx.response.type = 'text/html;charset=utf-8';
+
+  if (stream) {
+    return renderToNodeStream(res);
+  } else {
+    return `<!DOCTYPE html>${renderToString(res)}`;
+  }
 }
 
 let viteServer: ViteDevServer|boolean = false;
-async function viteRender(ctx: Context) {
+async function viteRender(ctx: Context, config: IConfig) {
   const { serverEntry } = config;
   const { createServer } = await import('vite');
   viteServer = !viteServer ? await createServer(viteConfig()) : viteServer;
@@ -24,7 +37,7 @@ async function viteRender(ctx: Context) {
   return res;
 }
 
-async function commonRender(ctx: Context) {
+async function commonRender(ctx: Context, config: IConfig) {
   const { isDev, chunkName } = config;
 
   const serverFile = path.resolve(cwd, `./dist/server/${chunkName}.server.js`);

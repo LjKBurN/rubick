@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useMemo } from 'react';
 // @ts-expect-error
 import { STORE_CONTEXT } from '@dist/create-context';
 
@@ -22,8 +22,14 @@ function defaultReducer(state: any, action: Action) {
 
 export function AppContext(props: IProps) {
   const [state, dispatch] = useReducer(defaultReducer, defaultState);
+
+  const contextValue = useMemo(() => ({
+    state,
+    dispatch,
+  }), [state, dispatch]);
+
   return (
-    <STORE_CONTEXT.Provider value={{ state, dispatch }}>
+    <STORE_CONTEXT.Provider value={contextValue}>
       {props.children}
     </STORE_CONTEXT.Provider>
   );

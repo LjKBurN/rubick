@@ -3,8 +3,9 @@ export interface proxyOptions {
 }
 
 export interface IConfig {
-  mode: string;
+  mode: 'ssr' | 'csr';
   isVite: boolean;
+  stream: boolean;
   chunkName: string;
   clientEntry: string;
   clientOutput: string;
@@ -32,7 +33,8 @@ export interface IConfig {
 }
 
 export interface UserConfig {
-  mode?: string;
+  mode?: 'ssr' | 'csr';
+  stream?: boolean;
   isDev?: boolean;
   https?: boolean;
   fePort?: number;
@@ -43,4 +45,9 @@ export interface UserConfig {
       less?: any;
     }
   }
+}
+
+export interface RenderConfig {
+  mode?: 'ssr' | 'csr';
+  stream?: boolean;
 }

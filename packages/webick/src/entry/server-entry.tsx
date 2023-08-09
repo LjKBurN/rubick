@@ -25,13 +25,17 @@ const serverRender = async (ctx: Context, config: IConfig) => {
 
   const { component, fetch, webpackChunkName } = routeItem;
 
-  const Component = (await component()).default;
+  const Component = isSSR ? (await component()).default : React.Fragment;
+  
+  let [layoutFetchData, fetchData] = [{}, {}]
 
   const currentFetch = fetch ? (await fetch()).default : null;
 
-  const routerParams = parseUrl(ctx);
-  const layoutFetchData = layoutFetch ? await layoutFetch({ routerParams, ctx, _isClient: false }) : {};
-  const fetchData = currentFetch ? await currentFetch({ routerParams, ctx, _isClient: false }) : {};
+  if (isSSR) {
+    const routerParams = parseUrl(ctx);
+    layoutFetchData = layoutFetch ? await layoutFetch({ routerParams, ctx, _isClient: false }) : {};
+    fetchData = currentFetch ? await currentFetch({ routerParams, ctx, _isClient: false }) : {};
+  }
 
   const combineData = Object.assign(layoutFetchData, fetchData);
 
