@@ -39,6 +39,9 @@ const commonConfig = (): UserConfig => {
           ...css?.loaderOptions?.less,
         },
       },
+      postcss: {
+        plugins: [require('postcss-preset-env')],
+      }
     },
   }
 }

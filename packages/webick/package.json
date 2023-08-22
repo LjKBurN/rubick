@@ -1,6 +1,6 @@
 {
   "name": "webick",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "a react web frame",
   "author": "liaokai02 <liaokai02@maoyan.com>",
   "homepage": "https://github.com/LjKBurN/rubick/tree/main/packages/webick#readme",
@@ -37,6 +37,9 @@
     "mini-css-extract-plugin": "^2.5.3",
     "ora": "^4.0.4",
     "path-to-regexp": "^6.2.0",
+    "postcss": "^8.4.28",
+    "postcss-loader": "^7.3.3",
+    "postcss-preset-env": "^9.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-refresh": "^0.11.0",

@@ -84,6 +84,14 @@ const getBaseConfig = (isClient: boolean = false) => {
                 importLoaders: 1,
               },
             },
+            {
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  plugins: ['postcss-preset-env'],
+                },
+              },
+            },
           ]
         },
         {
@@ -104,6 +112,14 @@ const getBaseConfig = (isClient: boolean = false) => {
               },
             },
             {
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  plugins: ['postcss-preset-env'],
+                },
+              },
+            },
+            {
               loader: 'less-loader',
               options: {
                 lessOptions: {
@@ -111,7 +127,7 @@ const getBaseConfig = (isClient: boolean = false) => {
                   ...css?.loaderOptions?.less,
                 },
               },
-            }
+            },
           ]
         },
         {
