@@ -26,7 +26,7 @@ const serverRender = async (ctx: Context, config: IConfig) => {
   const { component, fetch, webpackChunkName } = routeItem;
 
   const Component = isSSR ? (await component()).default : React.Fragment;
-  
+
   let [layoutFetchData, fetchData] = [{}, {}]
 
   const currentFetch = fetch ? (await fetch()).default : null;
@@ -50,7 +50,7 @@ const serverRender = async (ctx: Context, config: IConfig) => {
       __html: 'window.__USE_VITE__=true',
     }}/>,
     (isDev && isVite) && <script key="viteEntry" src="/node_modules/webick/esm/src/entry/client-entry.js" type="module" />,
-    ...jsOrder.map((js) => <script key={js} src={manifest[js]} type={isVite ? 'module' : ''} />),
+    ...jsOrder.map(js => manifest[js]).filter(Boolean).map(item => <script key={item} src={item} type={isVite ? 'module' : 'text/javascript'} />),
   ];
 
   const injectCss: JSX.Element[] = [];
@@ -61,13 +61,6 @@ const serverRender = async (ctx: Context, config: IConfig) => {
   Object.keys(manifest).forEach((name) => {
     if (name.startsWith('static/css/')) {
       dynamicCssOrder.push(name);
-    }
-  });
-
-  dynamicCssOrder.forEach((css) => {
-    if (manifest[css]) {
-      const item = manifest[css];
-      injectCss.push(<link rel="stylesheet" key={item} href={item} />);
     }
   });
 
@@ -82,9 +75,21 @@ const serverRender = async (ctx: Context, config: IConfig) => {
     }} />);
   }
 
-  const injectState = isSSR ? (
-    <script dangerouslySetInnerHTML={{ __html: `window.__USE_SSR__=true;` }} />
-  ) : null;
+  dynamicCssOrder.forEach((css) => {
+    if (manifest[css]) {
+      const item = manifest[css];
+      injectCss.push(<link rel="stylesheet" key={item} href={item} />);
+    }
+  });
+
+  // preload
+  jsOrder.map(js => manifest[js]).filter(Boolean).forEach(js => {
+    injectCss.push(<link href={js} as="script" rel={isVite ? 'modulepreload' : 'preload'}/>);
+  });
+
+  const innerHtml = `window.__USE_SSR__=${isSSR}`;
+
+  const injectState = <script dangerouslySetInnerHTML={{ __html: innerHtml }} />
   return (
     <StaticRouter location={ctx.request.url}>
       <STORE_CONTEXT.Provider value={{ state: combineData }}>

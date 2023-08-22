@@ -48,7 +48,7 @@ const loadConfig = (): IConfig => {
 
   const chunkName = 'Page';
 
-  const jsOrder = [`runtime~${chunkName}.js`, 'vendor.js', `${chunkName}.js`];
+  const jsOrder = isVite ? [`${chunkName}.js`] : [`runtime~${chunkName}.js`, 'vendor.js', `${chunkName}.js`];
 
   const cssOrder = [`${chunkName}.css`];
 
