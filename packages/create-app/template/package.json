@@ -10,8 +10,8 @@
     "build": "rubick build"
   },
   "dependencies": {
-    "snest": "^0.0.3",
-    "webick": "^0.0.10",
+    "snest": "^1.0.1",
+    "webick": "^0.1.7",
     "axios": "^0.26.0",
     "koa-body": "^4.2.0",
     "koa-static": "^5.0.0",
