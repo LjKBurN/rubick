@@ -83,7 +83,7 @@ const renderRoutes = async (pageDir: string, pathRecord: string[]) => {
       //   }
       //   route.webpackChunkName = `${webpackChunkName}-${getDynamicParam(pageFiles).replace(/\/:\??/g, '-').replace('?', '-optional')}`
       // }
-      if (pageFiles.includes('render')) {
+      if (pageFiles.includes('render.tsx') || pageFiles.includes('render.jsx')) {
         route.path = `${getDynamicParam(prefixPath)}`;
         route.component = `${aliasPath}/${pageFiles}`
         let webpackChunkName = pathRecord.join('-');
