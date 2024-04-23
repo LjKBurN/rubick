@@ -7,6 +7,9 @@ const config = loadConfig();
 const startServerBuild = async () => {
   const { webpackStatsOption } = config;
   const stats = await webpackPromisify(getServerConfig());
+  if(!stats || stats.hasErrors()){
+    process.exit(1);
+  }
   console.log('server build done\n', stats?.toString(webpackStatsOption));
 };
 

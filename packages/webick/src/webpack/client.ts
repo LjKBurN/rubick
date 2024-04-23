@@ -23,6 +23,10 @@ const startClientServer = async (): Promise<void>  => {
 const startClientBuild = async () => {
   const { webpackStatsOption } = config;
   const stats = await webpackPromisify(getClientConfig());
+  // 构建错误退出
+  if(!stats || stats.hasErrors()){
+    process.exit(1);
+  }
   console.log('client build done\n', stats?.toString(webpackStatsOption));
 }
 
