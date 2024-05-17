@@ -9,7 +9,7 @@ import { getBaseConfig } from './base';
 const WebpackBarPlugin = require('webpackbar');
 
 const getClientConfig = () => {
-  const { chunkName, clientEntry, clientOutput, outputPublicPath, isDev, fePort } = loadConfig();
+  const { chunkName, clientEntry, clientOutput, outputPublicPath, isDev, fePort, userWebpack } = loadConfig();
   const clientConfig: Configuration = {
     entry: { [`${chunkName}`]: clientEntry },
     devtool: isDev ? 'cheap-module-source-map' : false,
@@ -54,8 +54,16 @@ const getClientConfig = () => {
       ],
     },
   }
-
-  return merge(getBaseConfig(true), clientConfig);
+  if(userWebpack){
+    if( typeof userWebpack === 'function'){
+      return userWebpack(merge(getBaseConfig(true), clientConfig), {isClient: true});
+    }else{
+      throw new Error('userWebpack应该为函数');
+    }
+  }else{
+    return merge(getBaseConfig(true), clientConfig)
+  }
+  
 }
 
 export {

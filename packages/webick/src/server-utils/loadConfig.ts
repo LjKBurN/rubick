@@ -87,7 +87,6 @@ const loadConfig = (): IConfig => {
       stats: webpackStatsOption
     },
   };
-  
   const config: IConfig = {
     mode,
     stream,
@@ -111,6 +110,7 @@ const loadConfig = (): IConfig => {
     webpackDevServerConfig,
     webpackStatsOption,
     css: userConfig?.css || {},
+    userWebpack: userConfig?.userWebpack,
   }
 
   return config;

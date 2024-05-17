@@ -7,7 +7,7 @@ import { getBaseConfig } from './base';
 const WebpackBarPlugin = require('webpackbar');
 
 const getServerConfig = () => {
-  const { isDev, chunkName, serverEntry, serverOutput } = loadConfig();
+  const { isDev, chunkName, serverEntry, serverOutput, userWebpack } = loadConfig();
   const serverConfig: webpack.Configuration = {
     watch: isDev,
     devtool: isDev ? 'inline-source-map' : false,
@@ -37,8 +37,15 @@ const getServerConfig = () => {
       }),
     ],
   }
-
-  return merge(getBaseConfig(), serverConfig);
+  if(userWebpack){
+    if( typeof userWebpack === 'function'){
+      return userWebpack(merge(getBaseConfig(), serverConfig), {isClient: false});
+    }else{
+      throw new Error('userWebpack应该为函数');
+    }
+  }else{
+    return merge(getBaseConfig(), serverConfig)
+  }
 }
 
 export {

@@ -1,3 +1,5 @@
+import type { Configuration } from 'webpack';
+
 export interface proxyOptions {
   express?: boolean;
 }
@@ -29,7 +31,8 @@ export interface IConfig {
       cssOptions?: any;
       less?: any;
     }
-  }
+  },
+  userWebpack?: (config:Configuration, options: any )=> Configuration
 }
 
 export interface UserConfig {
@@ -45,6 +48,7 @@ export interface UserConfig {
       less?: any;
     }
   }
+  userWebpack?: (config:Configuration, options: any )=> Configuration
 }
 
 export interface RenderConfig {
