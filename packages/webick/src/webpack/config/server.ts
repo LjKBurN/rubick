@@ -37,14 +37,15 @@ const getServerConfig = () => {
       }),
     ],
   }
+  const config = merge(getBaseConfig(), serverConfig);
   if(userWebpack){
     if( typeof userWebpack === 'function'){
-      return userWebpack(merge(getBaseConfig(), serverConfig), {isClient: false});
+      return userWebpack(config, {isClient: false});
     }else{
       throw new Error('userWebpack应该为函数');
     }
   }else{
-    return merge(getBaseConfig(), serverConfig)
+    return config
   }
 }
 

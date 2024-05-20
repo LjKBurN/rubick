@@ -54,14 +54,15 @@ const getClientConfig = () => {
       ],
     },
   }
+  const config = merge(getBaseConfig(true), clientConfig);
   if(userWebpack){
     if( typeof userWebpack === 'function'){
-      return userWebpack(merge(getBaseConfig(true), clientConfig), {isClient: true});
+      return userWebpack(config, {isClient: true});
     }else{
       throw new Error('userWebpack应该为函数');
     }
   }else{
-    return merge(getBaseConfig(true), clientConfig)
+    return config;
   }
   
 }
