@@ -33,9 +33,9 @@ const loadConfig = (): IConfig => {
   const serverOutput = join(cwd, './dist/server');
 
   const publicPath = userConfig.publicPath?.startsWith('http') ? userConfig.publicPath : normalizeStartPath(userConfig.publicPath ?? '/');
-  const devPublicPath = publicPath.startsWith('http') ? publicPath.replace(/^http(s)?:\/\/(.*)?\d/, '') : publicPath;
+  const devPublicPath = publicPath.startsWith('http') ? '' : publicPath;
 
-  const outputPublicPath = isDev ? devPublicPath : `${devPublicPath}client/`;
+  const outputPublicPath = isDev ? devPublicPath : `${publicPath}client/`;
 
   // webpack-dev-server的端口号
   const fePort = userConfig.fePort ?? 8881;
